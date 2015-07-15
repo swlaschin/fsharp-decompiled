@@ -7,6 +7,8 @@ let Add x y = x + y
 /// add 1 to a number
 let Add1 x = x + 1
 
+/// define a empty class inside a module
+type Something() = class end 
 
 /// Create a submodule
 module GameFunctions =

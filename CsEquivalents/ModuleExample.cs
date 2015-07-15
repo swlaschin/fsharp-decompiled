@@ -25,6 +25,14 @@ namespace CsSample
             return x + 1;
         }
 
+        [Serializable]
+        public class Something
+        {
+            public Something()                
+            {
+            }
+        }
+
         /// <summary>
         ///  Create a submodule
         /// </summary>
@@ -54,6 +62,7 @@ namespace CsSample
                 return new FinalGameScore(game.Game, f.Invoke(game.FinalScore));
             }
         }
+
 
 
     }
