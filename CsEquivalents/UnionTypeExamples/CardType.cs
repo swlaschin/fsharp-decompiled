@@ -82,16 +82,12 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
 		{
-			if (this == null)
-			{
-				return 0;
-			}
-			if (this.Tag == 0)
-			{
-				return 0;
-			}
-			return 1;
-		}
+            if (this != null)
+            {
+                return this.Tag;
+            }
+            return 0;
+        }
 
         /// <summary>
         ///  Needed for custom equality

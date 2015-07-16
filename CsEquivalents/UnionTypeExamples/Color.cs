@@ -113,16 +113,7 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			if (this != null)
 			{
-				switch (this.Tag)
-				{
-				case 0:
-					return 0;
-				case 1:
-					return 1;
-				case 2:
-					return 2;
-				}
-				return 0;
+				return this.Tag;
 			}
 			return 0;
 		}
