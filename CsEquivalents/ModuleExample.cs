@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
+using CsEquivalents.RecordTypeExamples;
 using Microsoft.FSharp.Core;
 
-using CsEquivalents.RecordTypeExamples;
-
-namespace CsSample
+namespace CsEquivalents
 {
 
     public static class ModuleExample

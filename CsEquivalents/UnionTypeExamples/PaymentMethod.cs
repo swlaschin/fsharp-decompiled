@@ -30,9 +30,6 @@ namespace CsEquivalents.UnionTypeExamples
         [Serializable]
         internal class _Cash : PaymentMethod
         {
-            internal _Cash()
-            {
-            }
         }
 
         /// <summary>
@@ -41,19 +38,11 @@ namespace CsEquivalents.UnionTypeExamples
         [Serializable]
         public class Check : PaymentMethod
         {
-            internal readonly CheckNumber item;
-
-            public CheckNumber Item
-            {
-                get
-                {
-                    return this.item;
-                }
-            }
+            public CheckNumber Item { get; private set; }
 
             internal Check(CheckNumber item)
             {
-                this.item = item;
+                Item = item;
             }
         }
 
@@ -63,29 +52,13 @@ namespace CsEquivalents.UnionTypeExamples
         [Serializable]
         public class CreditCard : PaymentMethod
         {
-            internal readonly CardType item1;
-            internal readonly CardNumber item2;
-
-            public CardType Item1
-            {
-                get
-                {
-                    return this.item1;
-                }
-            }
-
-            public CardNumber Item2
-            {
-                get
-                {
-                    return this.item2;
-                }
-            }
+            public CardType Item1 { get; private set; }
+            public CardNumber Item2 { get; private set; }
 
             internal CreditCard(CardType item1, CardNumber item2)
             {
-                this.item1 = item1;
-                this.item2 = item2;
+                Item1 = item1;
+                Item2 = item2;
             }
         }
 
@@ -96,12 +69,12 @@ namespace CsEquivalents.UnionTypeExamples
         {
             get
             {
-                return (!(this is PaymentMethod.CreditCard)) ? ((!(this is PaymentMethod.Check)) ? 0 : 1) : 2;
+                return (!(this is CreditCard)) ? ((!(this is Check)) ? 0 : 1) : 2;
             }
         }
 
         // Cash has no extra data so can be implemented as singleton instance
-        internal static readonly PaymentMethod _unique_Cash = new PaymentMethod._Cash();
+        internal static readonly PaymentMethod _unique_Cash = new _Cash();
 
 
         /// <summary>
@@ -112,7 +85,7 @@ namespace CsEquivalents.UnionTypeExamples
         {
             get
             {
-                return PaymentMethod._unique_Cash;
+                return _unique_Cash;
             }
         }
 
@@ -120,7 +93,7 @@ namespace CsEquivalents.UnionTypeExamples
         {
             get
             {
-                return this is PaymentMethod._Cash;
+                return this is _Cash;
             }
         }
 
@@ -129,14 +102,14 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public static PaymentMethod NewCheck(CheckNumber item)
         {
-            return new PaymentMethod.Check(item);
+            return new Check(item);
         }
 
         public bool IsCheck
         {
             get
             {
-                return this is PaymentMethod.Check;
+                return this is Check;
             }
         }
 
@@ -145,14 +118,14 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public static PaymentMethod NewCreditCard(CardType item1, CardNumber item2)
         {
-            return new PaymentMethod.CreditCard(item1, item2);
+            return new CreditCard(item1, item2);
         }
 
         public bool IsCreditCard
         {
             get
             {
-                return this is PaymentMethod.CreditCard;
+                return this is CreditCard;
             }
         }
 
@@ -168,27 +141,22 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            if (this != null)
+            if (!(this is _Cash))
             {
-                if (!(this is PaymentMethod._Cash))
+                const int offset = -1640531527;
+                if (this is Check)
                 {
-                    var offset = -1640531527;
-                    if (this is PaymentMethod.Check)
-                    {
-                        PaymentMethod.Check check = (PaymentMethod.Check)this;
-                        int num = 1;
-                        return offset + (check.item.GetHashCode(comp) + ((num << 6) + (num >> 2)));
-                    }
-                    if (this is PaymentMethod.CreditCard)
-                    {
-                        PaymentMethod.CreditCard creditCard = (PaymentMethod.CreditCard)this;
-                        int num = 2;
-                        num = offset + (creditCard.item2.GetHashCode(comp) + ((num << 6) + (num >> 2)));
-                        return offset + (creditCard.item1.GetHashCode(comp) + ((num << 6) + (num >> 2)));
-                    }
+                    var check = (Check)this;
+                    var num = 1;
+                    return offset + (check.Item.GetHashCode(comp) + ((num << 6) + (num >> 2)));
                 }
-                PaymentMethod._Cash cash = (PaymentMethod._Cash)this;
-                return 0;
+                if (this is CreditCard)
+                {
+                    var creditCard = (CreditCard)this;
+                    var num = 2;
+                    num = offset + (creditCard.Item2.GetHashCode(comp) + ((num << 6) + (num >> 2)));
+                    return offset + (creditCard.Item1.GetHashCode(comp) + ((num << 6) + (num >> 2)));
+                }
             }
             return 0;
         }
@@ -198,7 +166,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override int GetHashCode()
         {
-            return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
+            return GetHashCode(LanguagePrimitives.GenericEqualityComparer);
         }
 
         /// <summary>
@@ -206,31 +174,27 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public bool Equals(PaymentMethod obj)
         {
-            if (this == null)
-            {
-                return obj == null;
-            }
             if (obj == null)
             {
                 return false;
             }
-            if (this.Tag != obj.Tag)
+            if (Tag != obj.Tag)
             {
                 return false;
             }
-            if (this is PaymentMethod.Check)
+            if (this is Check)
             {
-                PaymentMethod.Check check = (PaymentMethod.Check)this;
-                PaymentMethod.Check check2 = (PaymentMethod.Check)obj;
-                return check.item.Equals(check2.item);
+                var check = (Check)this;
+                var check2 = (Check)obj;
+                return check.Item.Equals(check2.Item);
             }
-            if (!(this is PaymentMethod.CreditCard))
+            if (!(this is CreditCard))
             {
                 return true;
             }
-            PaymentMethod.CreditCard creditCard = (PaymentMethod.CreditCard)this;
-            PaymentMethod.CreditCard creditCard2 = (PaymentMethod.CreditCard)obj;
-            return creditCard.item1.Equals(creditCard2.item1) && creditCard.item2.Equals(creditCard2.item2);
+            var creditCard = (CreditCard)this;
+            var creditCard2 = (CreditCard)obj;
+            return creditCard.Item1.Equals(creditCard2.Item1) && creditCard.Item2.Equals(creditCard2.Item2);
         }
 
         /// <summary>
@@ -238,8 +202,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override bool Equals(object obj)
         {
-            PaymentMethod paymentMethod = obj as PaymentMethod;
-            return paymentMethod != null && this.Equals(paymentMethod);
+            var paymentMethod = obj as PaymentMethod;
+            return paymentMethod != null && Equals(paymentMethod);
         }
 
         /// <summary>
@@ -256,46 +220,39 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(PaymentMethod obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
-                int num = this.Tag.CompareTo(obj.Tag);
-                if (num != 0)
-                {
-                    return num;
-                }
-
-                IComparer genericComparer = LanguagePrimitives.GenericComparer;
-
-                // both same type now
-                if (this is PaymentMethod.Check)
-                {
-                    PaymentMethod.Check check = (PaymentMethod.Check)this;
-                    PaymentMethod.Check check2 = (PaymentMethod.Check)obj;
-                    return check.item.CompareTo(check2.item, genericComparer);
-                }
-
-                if (!(this is PaymentMethod.CreditCard))
-                {
-                    return 0;
-                }
-
-                PaymentMethod.CreditCard creditCard = (PaymentMethod.CreditCard)this;
-                PaymentMethod.CreditCard creditCard2 = (PaymentMethod.CreditCard)obj;
-                num = creditCard.item1.CompareTo(creditCard2.item1, genericComparer);
-                if (num != 0)
-                {
-                    return num;
-                }
-                return creditCard.item2.CompareTo(creditCard2.item2, genericComparer);
+                return 1;
             }
-            else
+            var num = Tag.CompareTo(obj.Tag);
+            if (num != 0)
             {
-                return obj != null ? -1 : 0;
+                return num;
             }
+
+            var genericComparer = LanguagePrimitives.GenericComparer;
+
+            // both same type now
+            if (this is Check)
+            {
+                var check = (Check) this;
+                var check2 = (Check) obj;
+                return check.Item.CompareTo(check2.Item, genericComparer);
+            }
+
+            if (!(this is CreditCard))
+            {
+                return 0;
+            }
+
+            var creditCard = (CreditCard) this;
+            var creditCard2 = (CreditCard) obj;
+            num = creditCard.Item1.CompareTo(creditCard2.Item1, genericComparer);
+            if (num != 0)
+            {
+                return num;
+            }
+            return creditCard.Item2.CompareTo(creditCard2.Item2, genericComparer);
         }
 
         /// <summary>
@@ -303,7 +260,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj)
         {
-            return this.CompareTo((PaymentMethod)obj);
+            return CompareTo((PaymentMethod)obj);
         }
 
         /// <summary>
@@ -312,7 +269,7 @@ namespace CsEquivalents.UnionTypeExamples
         public int CompareTo(object obj, IComparer comp)
         {
             // ignore the IComparer as a simplification -- the generated F# code is more complex
-            return this.CompareTo((PaymentMethod)obj);
+            return CompareTo((PaymentMethod)obj);
         }
     }
 }

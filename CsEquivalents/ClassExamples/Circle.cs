@@ -9,23 +9,15 @@ namespace CsEquivalents.ClassExamples
     [Serializable]
     public class Circle : ShapeBase
     {
-        internal int radius;
-
         /// <summary>
         ///  subclass specific property
         /// </summary>
-        public int Radius
-        {
-            get
-            {
-                return this.radius;
-            }
-        }
+        public int Radius { get; internal set; }
 
         public Circle(string name, int radius)
             : base(name)
         {
-            this.radius = radius;
+            this.Radius = radius;
         }
 
         /// <summary>
@@ -33,7 +25,7 @@ namespace CsEquivalents.ClassExamples
         /// </summary>
         public override void Draw()
         {
-            Console.Write("I am a circle with radius {0}", this.radius);
+            Console.Write("I am a circle with radius {0}", this.Radius);
         }
     }
 }

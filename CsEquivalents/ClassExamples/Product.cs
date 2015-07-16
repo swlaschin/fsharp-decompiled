@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CsEquivalents.RecordTypeExamples
+namespace CsEquivalents.ClassExamples
 {
 
     /// <summary>
@@ -9,50 +9,20 @@ namespace CsEquivalents.RecordTypeExamples
     [Serializable]
     public class Product
     {
-        internal object _Id;
-        internal object _Name;
-        internal double _Price;
-
         /// <summary>
         ///  immutable Id property
         /// </summary>
-        public object Id
-        {
-            get
-            {
-                return this._Id;
-            }
-        }
+        public object Id { get; internal set; }
 
         /// <summary>
         ///  mutable Name property
         /// </summary>
-        public object Name
-        {
-            get
-            {
-                return this._Name;
-            }
-            set
-            {
-                this._Name = value;
-            }
-        }
+        public object Name { get; set; }
 
         /// <summary>
         ///  mutable Price property
         /// </summary>
-        public double Price
-        {
-            get
-            {
-                return this._Price;
-            }
-            set
-            {
-                this._Price = value;
-            }
-        }
+        public double Price { get; set; }
 
         /// <summary>
         ///  True if price &gt; 10.00
@@ -81,16 +51,16 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public Product(object id, object name, double price)
         {
-            this._Id = id;
-            this._Price = price;
-            this._Name = name;
+            this.Id = id;
+            this.Price = price;
+            this.Name = name;
         }
 
         /// <summary>
         ///  secondary constructor
         /// </summary>
         public Product(object id, object name)
-            : this(id, name, Product.DefaultPrice)
+            : this(id, name, DefaultPrice)
         {
         }
 

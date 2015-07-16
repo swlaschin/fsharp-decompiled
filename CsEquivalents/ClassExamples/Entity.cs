@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
-using Microsoft.FSharp.Core;
 
-namespace CsEquivalents.RecordTypeExamples
+namespace CsEquivalents.ClassExamples
 {
 
     /// <summary>
@@ -11,39 +9,20 @@ namespace CsEquivalents.RecordTypeExamples
     [Serializable]
     public class Entity : IEquatable<Entity>
     {
-        internal int _Id;
-        internal string _Name;
-
         /// <summary>
         ///  immutable Id property
         /// </summary>
-        public int Id
-        {
-            get
-            {
-                return this._Id;
-            }
-        }
+        public int Id { get; internal set; }
 
         /// <summary>
         ///  mutable Name property
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this._Name;
-            }
-            set
-            {
-                this._Name = value;
-            }
-        }
+        public string Name { get; set; }
 
         public Entity(int id, string name)
         {
-            this._Id = id;
-            this._Name = name;
+            this.Id = id;
+            this.Name = name;
         }
 
         /// <summary>
@@ -51,13 +30,9 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public override bool Equals(object obj)
         {
-            Entity entity = obj as Entity;
-            if (entity != null)
-            {
-                Entity ent = entity;
-                return this.Id == ent.Id;
-            }
-            return false;
+            var entity = obj as Entity;
+            if (entity == null) return false;
+            return this.Id == entity.Id;
         }
 
         /// <summary>

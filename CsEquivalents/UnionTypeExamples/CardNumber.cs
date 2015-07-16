@@ -13,8 +13,6 @@ namespace CsEquivalents.UnionTypeExamples
         IComparable,
         IStructuralComparable
     {
-        internal readonly string item;
-
         /// <summary>
         ///  Implemented for all F# union types. Not used in this case.
         /// </summary>
@@ -29,13 +27,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Property to access wrapped value
         /// </summary>
-        public string Item
-        {
-            get
-            {
-                return this.item;
-            }
-        }
+        public string Item { get; private set; }
 
         /// <summary>
         /// static public constructor 
@@ -50,7 +42,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         internal CardNumber(string item)
         {
-            this.item = item;
+            this.Item = item;
         }
 
         /// <summary>
@@ -58,14 +50,10 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            if (this != null)
-            {
-                int num = 0;
-                int arg_39_0 = -1640531527;
-                string text = this.item;
-                return arg_39_0 + (((text == null) ? 0 : text.GetHashCode()) + ((num << 6) + (num >> 2)));
-            }
-            return 0;
+            int num = 0;
+            const int offset = -1640531527;
+            string text = this.Item;
+            return offset + (((text == null) ? 0 : text.GetHashCode()) + ((num << 6) + (num >> 2)));
         }
 
         /// <summary>
@@ -81,11 +69,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public bool Equals(CardNumber obj)
         {
-            if (this != null)
-            {
-                return obj != null && string.Equals(this.item, obj.item);
-            }
-            return obj == null;
+            return obj != null && string.Equals(this.Item, obj.Item);
         }
 
         /// <summary>
@@ -93,7 +77,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override bool Equals(object obj)
         {
-            CardNumber cardNumber = obj as CardNumber;
+            var cardNumber = obj as CardNumber;
             return cardNumber != null && this.Equals(cardNumber);
         }
 
@@ -112,18 +96,11 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(CardNumber obj)
         {
-            if (this != null)
+            if (obj != null)
             {
-                if (obj != null)
-                {
-                    return string.CompareOrdinal(this.item, obj.item);
-                }
-                return 1;
+                return string.CompareOrdinal(this.Item, obj.Item);
             }
-            else
-            {
-                return obj != null ? -1 : 0;
-            }
+            return 1;
         }
 
         /// <summary>

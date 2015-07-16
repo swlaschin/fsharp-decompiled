@@ -16,42 +16,23 @@ namespace CsEquivalents.RecordTypeExamples
         IComparable,
         IStructuralComparable
     {
-        internal string _Game;
-        internal int _CurrentScore;
-
         /// <summary>
         /// Game property
         /// </summary>
-        public string Game
-        {
-            get
-            {
-                return this._Game;
-            }
-        }
+        public string Game { get; internal set; }
 
         /// <summary>
         /// Mutable CurrentScore property
         /// </summary>
-        public int CurrentScore
-        {
-            get
-            {
-                return this._CurrentScore;
-            }
-            set
-            {
-                this._CurrentScore = value;
-            }
-        }
+        public int CurrentScore { get; set; }
 
         /// <summary>
         /// Constructor 
         /// </summary>
         public UpdatableGameScore(string game, int currentScore)
         {
-            this._Game = game;
-            this._CurrentScore = currentScore;
+            this.Game = game;
+            this.CurrentScore = currentScore;
         }
 
         /// <summary>
@@ -59,21 +40,17 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            if (this != null)
-            {
-                int num = 0;
-                int offset = -1640531527;
-                num = offset + (this._CurrentScore + ((num << 6) + (num >> 2)));
-                string _game = this._Game;
-                return offset + (((_game == null) ? 0 : _game.GetHashCode()) + ((num << 6) + (num >> 2)));
-            }
-            return 0;
+            int num = 0;
+            const int offset = -1640531527;
+            num = offset + (this.CurrentScore + ((num << 6) + (num >> 2)));
+            string game = this.Game;
+            return offset + (((game == null) ? 0 : game.GetHashCode()) + ((num << 6) + (num >> 2)));
         }
 
         /// <summary>
         ///  Needed for custom equality
         /// </summary>
-        public sealed override int GetHashCode()
+        public override int GetHashCode()
         {
             return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
         }
@@ -83,21 +60,17 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public bool Equals(UpdatableGameScore obj)
         {
-            if (this != null)
-            {
-                return obj != null
-                    && string.Equals(this._Game, obj._Game)
-                    && this._CurrentScore == obj._CurrentScore;
-            }
-            return obj == null;
+            return obj != null
+                   && string.Equals(this.Game, obj.Game)
+                   && this.CurrentScore == obj.CurrentScore;
         }
 
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public sealed override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
-            UpdatableGameScore updatableGameScore = obj as UpdatableGameScore;
+            var updatableGameScore = obj as UpdatableGameScore;
             return updatableGameScore != null && this.Equals(updatableGameScore);
         }
 
@@ -116,25 +89,18 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int CompareTo(UpdatableGameScore obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
-
-                int num = string.CompareOrdinal(this._Game, obj._Game);
-                if (num != 0)
-                {
-                    return num;
-                }
-
-                return this._CurrentScore.CompareTo(obj._CurrentScore);
+                return 1;
             }
-            else
+
+            int num = string.CompareOrdinal(this.Game, obj.Game);
+            if (num != 0)
             {
-                return obj != null ? -1 : 0;
+                return num;
             }
+
+            return this.CurrentScore.CompareTo(obj.CurrentScore);
         }
 
         /// <summary>

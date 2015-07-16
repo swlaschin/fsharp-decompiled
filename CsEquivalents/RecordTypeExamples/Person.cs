@@ -16,51 +16,29 @@ namespace CsEquivalents.RecordTypeExamples
         IComparable,
         IStructuralComparable
     {
-        internal string _FirstName;
-        internal string _LastName;
-        internal DateTime _DateOfBirth;
-
         /// <summary>
         /// Stores first name
         /// </summary>
-        public string FirstName
-        {
-            get
-            {
-                return this._FirstName;
-            }
-        }
+        public string FirstName { get; internal set; }
 
         /// <summary>
         /// Stores last name
         /// </summary>
-        public string LastName
-        {
-            get
-            {
-                return this._LastName;
-            }
-        }
+        public string LastName { get; internal set; }
 
         /// <summary>
         /// Stores date of birth
         /// </summary>
-        public DateTime DateOfBirth
-        {
-            get
-            {
-                return this._DateOfBirth;
-            }
-        }
+        public DateTime DateOfBirth { get; internal set; }
 
         /// <summary>
         /// Constructor 
         /// </summary>
         public Person(string firstName, string lastName, DateTime dateOfBirth)
         {
-            this._FirstName = firstName;
-            this._LastName = lastName;
-            this._DateOfBirth = dateOfBirth;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.DateOfBirth = dateOfBirth;
         }
 
         /// <summary>
@@ -70,7 +48,7 @@ namespace CsEquivalents.RecordTypeExamples
         {
             get
             {
-                return this._FirstName + " " + this._LastName;
+                return this.FirstName + " " + this.LastName;
             }
         }
 
@@ -79,7 +57,7 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public bool IsBirthday()
         {
-            return DateTime.Today.Month == this._DateOfBirth.Month && DateTime.Today.Day == this._DateOfBirth.Day;
+            return DateTime.Today.Month == this.DateOfBirth.Month && DateTime.Today.Day == this.DateOfBirth.Day;
         }
 
         /// <summary>
@@ -87,23 +65,21 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            if (this != null)
-            {
-                int num = 0;
-                int offset = -1640531527;
-                num = offset + (LanguagePrimitives.HashCompare.GenericHashWithComparerIntrinsic<DateTime>(comp, this._DateOfBirth) + ((num << 6) + (num >> 2)));
-                string _lastName = this._LastName;
-                num = offset + (((_lastName == null) ? 0 : _lastName.GetHashCode()) + ((num << 6) + (num >> 2)));
-                string _firstName = this._FirstName;
-                return offset + (((_firstName == null) ? 0 : _firstName.GetHashCode()) + ((num << 6) + (num >> 2)));
-            }
-            return 0;
+            int num = 0;
+            const int offset = -1640531527;
+            num = offset +
+                  (LanguagePrimitives.HashCompare.GenericHashWithComparerIntrinsic(comp, this.DateOfBirth) +
+                   ((num << 6) + (num >> 2)));
+            string lastName = this.LastName;
+            num = offset + (((lastName == null) ? 0 : lastName.GetHashCode()) + ((num << 6) + (num >> 2)));
+            string firstName = this.FirstName;
+            return offset + (((firstName == null) ? 0 : firstName.GetHashCode()) + ((num << 6) + (num >> 2)));
         }
 
         /// <summary>
         ///  Needed for custom equality
         /// </summary>
-        public sealed override int GetHashCode()
+        public override int GetHashCode()
         {
             return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
         }
@@ -113,22 +89,18 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public bool Equals(Person obj)
         {
-            if (this != null)
-            {
-                return obj != null
-                    && string.Equals(this._FirstName, obj._FirstName)
-                    && string.Equals(this._LastName, obj._LastName)
-                    && LanguagePrimitives.HashCompare.GenericEqualityERIntrinsic<DateTime>(this._DateOfBirth, obj._DateOfBirth);
-            }
-            return obj == null;
+            return obj != null
+                   && string.Equals(this.FirstName, obj.FirstName)
+                   && string.Equals(this.LastName, obj.LastName)
+                   && LanguagePrimitives.HashCompare.GenericEqualityERIntrinsic(this.DateOfBirth, obj.DateOfBirth);
         }
 
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public sealed override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
-            Person person = obj as Person;
+            var person = obj as Person;
             return person != null && this.Equals(person);
         }
 
@@ -147,31 +119,25 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int CompareTo(Person obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
-
-                int num = string.CompareOrdinal(this._FirstName, obj._FirstName);
-                if (num != 0)
-                {
-                    return num;
-                }
-
-                int num2 = string.CompareOrdinal(this._LastName, obj._LastName);
-                if (num2 != 0)
-                {
-                    return num2;
-                }
-                
-                return LanguagePrimitives.HashCompare.GenericComparisonWithComparerIntrinsic<DateTime>(LanguagePrimitives.GenericComparer, this._DateOfBirth, obj._DateOfBirth);
+                return 1;
             }
-            else
+
+            int num = string.CompareOrdinal(this.FirstName, obj.FirstName);
+            if (num != 0)
             {
-                return obj != null ? -1 : 0;
+                return num;
             }
+
+            int num2 = string.CompareOrdinal(this.LastName, obj.LastName);
+            if (num2 != 0)
+            {
+                return num2;
+            }
+
+            return LanguagePrimitives.HashCompare.GenericComparisonWithComparerIntrinsic(
+                    LanguagePrimitives.GenericComparer, this.DateOfBirth, obj.DateOfBirth);
         }
 
         /// <summary>

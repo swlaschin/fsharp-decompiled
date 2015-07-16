@@ -23,32 +23,24 @@ namespace CsEquivalents.UnionTypeExamples
 			public const int Blue = 2;
 		}
 
-		internal readonly int _tag;
-
-        // singletons -- one for each "enum"
+	    // singletons -- one for each "enum"
 		internal static readonly Color _unique_Red = new Color(0);
 		internal static readonly Color _unique_Green = new Color(1);
 		internal static readonly Color _unique_Blue = new Color(2);
 
-        /// <summary>
-        ///  Implemented for all F# union types. Used in this case to distinguish between the singletons.
-        /// </summary>
-        public int Tag
-		{
-			get
-			{
-				return this._tag;
-			}
-		}
+	    /// <summary>
+	    ///  Implemented for all F# union types. Used in this case to distinguish between the singletons.
+	    /// </summary>
+	    public int Tag { get; private set; }
 
-        /// <summary>
+	    /// <summary>
         ///  Static method to get one of the singletons
         /// </summary>
         public static Color Red
 		{
 			get
 			{
-				return Color._unique_Red;
+				return _unique_Red;
 			}
 		}
 
@@ -56,7 +48,7 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			get
 			{
-				return this.Tag == 0;
+				return Tag == 0;
 			}
 		}
 
@@ -67,7 +59,7 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			get
 			{
-				return Color._unique_Green;
+				return _unique_Green;
 			}
 		}
 
@@ -75,7 +67,7 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			get
 			{
-				return this.Tag == 1;
+				return Tag == 1;
 			}
 		}
 
@@ -86,7 +78,7 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			get
 			{
-				return Color._unique_Blue;
+				return _unique_Blue;
 			}
 		}
 
@@ -94,16 +86,16 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			get
 			{
-				return this.Tag == 2;
+				return Tag == 2;
 			}
 		}
 
         /// <summary>
         /// private constructor 
         /// </summary>
-        internal Color(int _tag)
+        internal Color(int tag)
 		{
-			this._tag = _tag;
+			Tag = tag;
 		}
 
         /// <summary>
@@ -111,11 +103,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
 		{
-			if (this != null)
-			{
-				return this.Tag;
-			}
-			return 0;
+            return Tag;
 		}
 
         /// <summary>
@@ -123,7 +111,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override int GetHashCode()
 		{
-			return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
+			return GetHashCode(LanguagePrimitives.GenericEqualityComparer);
 		}
 
         /// <summary>
@@ -131,13 +119,9 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public bool Equals(Color obj)
 		{
-			if (this == null)
+            if (obj != null)
 			{
-				return obj == null;
-			}
-			if (obj != null)
-			{
-                return this._tag == obj._tag;
+                return Tag == obj.Tag;
             }
 			return false;
 		}
@@ -147,8 +131,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override bool Equals(object obj)
 		{
-			Color color = obj as Color;
-			return color != null && this.Equals(color);
+			var color = obj as Color;
+			return color != null && Equals(color);
 		}
 
         /// <summary>
@@ -165,19 +149,12 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(Color obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
+                return 1;
+            }
 
-                return this._tag.CompareTo(obj._tag);
-            }
-            else
-            {
-                return obj != null ? -1 : 0;
-            }
+            return Tag.CompareTo(obj.Tag);
         }
 
         /// <summary>
@@ -185,7 +162,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj)
         {
-            return this.CompareTo((Color)obj);
+            return CompareTo((Color)obj);
         }
 
         /// <summary>
@@ -194,7 +171,7 @@ namespace CsEquivalents.UnionTypeExamples
         public int CompareTo(object obj, IComparer comp)
         {
             // ignore the IComparer as a simplification -- the generated F# code is more complex
-            return this.CompareTo((Color)obj);
+            return CompareTo((Color)obj);
         }
 	}
 }

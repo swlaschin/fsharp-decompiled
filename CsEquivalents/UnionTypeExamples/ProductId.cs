@@ -15,8 +15,6 @@ namespace CsEquivalents.UnionTypeExamples
         IComparable<ProductId>,
         IComparable, IStructuralComparable
     {
-        internal readonly int item;
-
         /// <summary>
         ///  Implemented for all F# union types. Not used in this case.
         /// </summary>
@@ -31,13 +29,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Property to access wrapped value
         /// </summary>
-        public int Item
-        {
-            get
-            {
-                return this.item;
-            }
-        }
+        public int Item { get; private set; }
 
         /// <summary>
         /// static public constructor 
@@ -52,7 +44,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         internal ProductId(int item)
         {
-            this.item = item;
+            this.Item = item;
         }
 
         /// <summary>
@@ -60,12 +52,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            if (this != null)
-            {
-                int num = 0;
-                return -1640531527 + (this.item + ((num << 6) + (num >> 2)));
-            }
-            return 0;
+            const int num = 0;
+            return -1640531527 + (this.Item + ((num << 6) + (num >> 2)));
         }
 
         /// <summary>
@@ -81,11 +69,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public bool Equals(ProductId obj)
         {
-            if (this != null)
-            {
-                return obj != null && this.item == obj.item;
-            }
-            return obj == null;
+            return obj != null && this.Item == obj.Item;
         }
 
         /// <summary>
@@ -93,7 +77,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override bool Equals(object obj)
         {
-            ProductId productId = obj as ProductId;
+            var productId = obj as ProductId;
             return productId != null && this.Equals(productId);
         }
 
@@ -112,18 +96,11 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(ProductId obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
-                return this.item.CompareTo(obj.item);
+                return 1;
             }
-            else
-            {
-                return obj != null ? -1 : 0;
-            }
+            return this.Item.CompareTo(obj.Item);
         }
 
         /// <summary>

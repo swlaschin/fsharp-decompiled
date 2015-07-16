@@ -14,31 +14,23 @@ namespace CsEquivalents.UnionTypeExamples
 			public const int Visa = 1;
 		}
 
-		internal readonly int _tag;
-
-        // singletons -- one for each "enum"
+	    // singletons -- one for each "enum"
 		internal static readonly CardType _unique_MasterCard = new CardType(0);
 		internal static readonly CardType _unique_Visa = new CardType(1);
 
-        /// <summary>
-        ///  Implemented for all F# union types. Used in this case to distinguish between the singletons.
-        /// </summary>
-        public int Tag
-		{
-			get
-			{
-				return this._tag;
-			}
-		}
+	    /// <summary>
+	    ///  Implemented for all F# union types. Used in this case to distinguish between the singletons.
+	    /// </summary>
+	    public int Tag { get; private set; }
 
-        /// <summary>
+	    /// <summary>
         ///  Static method to get one of the singletons
         /// </summary>
 		public static CardType MasterCard
 		{
 			get
 			{
-				return CardType._unique_MasterCard;
+				return _unique_MasterCard;
 			}
 		}
 
@@ -57,7 +49,7 @@ namespace CsEquivalents.UnionTypeExamples
 		{
 			get
 			{
-				return CardType._unique_Visa;
+				return _unique_Visa;
 			}
 		}
 
@@ -72,9 +64,9 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         /// private constructor 
         /// </summary>
-        internal CardType(int _tag)
+        internal CardType(int tag)
 		{
-			this._tag = _tag;
+			this.Tag = tag;
 		}
 
         /// <summary>
@@ -82,12 +74,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
 		{
-            if (this != null)
-            {
-                return this.Tag;
-            }
-            return 0;
-        }
+            return this.Tag;
+		}
 
         /// <summary>
         ///  Needed for custom equality
@@ -102,15 +90,11 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public bool Equals(CardType obj)
 		{
-			if (this == null)
-			{
-				return obj == null;
-			}
-			if (obj != null)
-			{
-                return this._tag == obj._tag;
-			}
-			return false;
+            if (obj != null)
+            {
+                return this.Tag == obj.Tag;
+            }
+            return false;
 		}
 
         /// <summary>
@@ -118,7 +102,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public sealed override bool Equals(object obj)
 		{
-			CardType cardType = obj as CardType;
+			var cardType = obj as CardType;
 			return cardType != null && this.Equals(cardType);
 		}
 
@@ -137,18 +121,11 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(CardType obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
-                return this._tag.CompareTo(obj._tag);
+                return 1;
             }
-            else
-            {
-                return obj != null ? -1 : 0;
-            }
+            return this.Tag.CompareTo(obj.Tag);
         }
 
         /// <summary>

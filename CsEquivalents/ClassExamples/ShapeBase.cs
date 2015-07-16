@@ -8,18 +8,10 @@ namespace CsEquivalents.ClassExamples
     [Serializable]
     public abstract class ShapeBase : IShape
     {
-        internal string name;
-
         /// <summary>
         ///  Explicit implementation of interface
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-        }
+        public string Name { get; internal set; }
 
         /// <summary>
         ///  abstract definition of Draw method
@@ -28,7 +20,7 @@ namespace CsEquivalents.ClassExamples
 
         protected ShapeBase(string name)
         {
-            this.name = name;
+            this.Name = name;
         }
 
     }

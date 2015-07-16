@@ -8,23 +8,15 @@ namespace CsEquivalents.ClassExamples
     [Serializable]
     public class Square : ShapeBase
     {
-        internal int size;
-
         /// <summary>
         ///  subclass specific property
         /// </summary>
-        public int Size
-        {
-            get
-            {
-                return this.size;
-            }
-        }
+        public int Size { get; internal set; }
 
         public Square(string name, int size)
             : base(name)
         {
-            this.size = size;
+            this.Size = size;
         }
 
         /// <summary>
@@ -32,7 +24,7 @@ namespace CsEquivalents.ClassExamples
         /// </summary>
         public override void Draw()
         {
-            Console.Write("I am a square with size {0}", this.size);
+            Console.Write("I am a square with size {0}", this.Size);
         }
     }
 }

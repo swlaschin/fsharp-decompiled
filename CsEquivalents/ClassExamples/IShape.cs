@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CsEquivalents.ClassExamples
+﻿namespace CsEquivalents.ClassExamples
 {
     /// <summary>
     ///  Interface

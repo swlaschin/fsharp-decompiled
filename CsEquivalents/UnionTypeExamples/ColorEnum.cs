@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using Microsoft.FSharp.Core; 
 
 namespace CsEquivalents.UnionTypeExamples
 {

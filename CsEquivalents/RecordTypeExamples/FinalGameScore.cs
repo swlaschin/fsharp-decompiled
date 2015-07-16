@@ -16,38 +16,23 @@ namespace CsEquivalents.RecordTypeExamples
         IComparable,
         IStructuralComparable
     {
-        internal string _Game;
-        internal int _FinalScore;
-        
         /// <summary>
         /// Game property
         /// </summary>
-        public string Game
-        {
-            get
-            {
-                return this._Game;
-            }
-        }
+        public string Game { get; internal set; }
 
         /// <summary>
         /// FinalScore property
         /// </summary>
-        public int FinalScore
-        {
-            get
-            {
-                return this._FinalScore;
-            }
-        }
+        public int FinalScore { get; internal set; }
 
         /// <summary>
         /// Constructor 
         /// </summary>
         public FinalGameScore(string game, int finalScore)
         {
-            this._Game = game;
-            this._FinalScore = finalScore;
+            this.Game = game;
+            this.FinalScore = finalScore;
         }
 
 
@@ -56,21 +41,17 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            if (this != null)
-            {
-                int num = 0;
-                int offset = -1640531527;
-                num = offset + (this._FinalScore + ((num << 6) + (num >> 2)));
-                string _game = this._Game;
-                return offset + (((_game == null) ? 0 : _game.GetHashCode()) + ((num << 6) + (num >> 2)));
-            }
-            return 0;
+            int num = 0;
+            int offset = -1640531527;
+            num = offset + (this.FinalScore + ((num << 6) + (num >> 2)));
+            string game = this.Game;
+            return offset + (((game == null) ? 0 : game.GetHashCode()) + ((num << 6) + (num >> 2)));
         }
 
         /// <summary>
         ///  Needed for custom equality
         /// </summary>
-        public sealed override int GetHashCode()
+        public override int GetHashCode()
         {
             return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
         }
@@ -80,21 +61,17 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public bool Equals(FinalGameScore obj)
         {
-            if (this != null)
-            {
-                return obj != null
-                    && string.Equals(this._Game, obj._Game)
-                    && this._FinalScore == obj._FinalScore;
-            }
-            return obj == null;
+            return obj != null
+                   && string.Equals(this.Game, obj.Game)
+                   && this.FinalScore == obj.FinalScore;
         }
 
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public sealed override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
-            FinalGameScore finalGameScore = obj as FinalGameScore;
+            var finalGameScore = obj as FinalGameScore;
             return finalGameScore != null && this.Equals(finalGameScore);
         }
 
@@ -112,25 +89,18 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int CompareTo(FinalGameScore obj)
         {
-            if (this != null)
+            if (obj == null)
             {
-                if (obj == null)
-                {
-                    return 1;
-                }
-
-                int num = string.CompareOrdinal(this._Game, obj._Game);
-                if (num != 0)
-                {
-                    return num;
-                }
-
-                return this._FinalScore.CompareTo(obj._FinalScore);
+                return 1;
             }
-            else
+
+            int num = string.CompareOrdinal(this.Game, obj.Game);
+            if (num != 0)
             {
-                return obj != null ? -1 : 0;
+                return num;
             }
+
+            return this.FinalScore.CompareTo(obj.FinalScore);
         }
 
         /// <summary>
