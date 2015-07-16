@@ -141,15 +141,15 @@ namespace CsEquivalents.UnionTypeExamples
             if (!(this is _Cash))
             {
                 const int offset = -1640531527;
-                if (this is Check)
+                var check = this as Check;
+                if (check != null)
                 {
-                    var check = (Check)this;
-                    var num = 1;
+                    const int num = 1;
                     return offset + (check.Item.GetHashCode(comp) + ((num << 6) + (num >> 2)));
                 }
-                if (this is CreditCard)
+                var creditCard = this as CreditCard;
+                if (creditCard != null)
                 {
-                    var creditCard = (CreditCard)this;
                     var num = 2;
                     num = offset + (creditCard.Item2.GetHashCode(comp) + ((num << 6) + (num >> 2)));
                     return offset + (creditCard.Item1.GetHashCode(comp) + ((num << 6) + (num >> 2)));
@@ -179,19 +179,19 @@ namespace CsEquivalents.UnionTypeExamples
             {
                 return false;
             }
-            if (this is Check)
+            var check1 = this as Check;
+            if (check1 != null)
             {
-                var check = (Check)this;
                 var check2 = (Check)obj;
-                return check.Item.Equals(check2.Item);
+                return check1.Item.Equals(check2.Item);
             }
-            if (!(this is CreditCard))
+            var creditCard1 = this as CreditCard;
+            if (creditCard1 != null)
             {
-                return true;
+                var creditCard2 = (CreditCard) obj;
+                return creditCard1.Item1.Equals(creditCard2.Item1) && creditCard1.Item2.Equals(creditCard2.Item2);
             }
-            var creditCard = (CreditCard)this;
-            var creditCard2 = (CreditCard)obj;
-            return creditCard.Item1.Equals(creditCard2.Item1) && creditCard.Item2.Equals(creditCard2.Item2);
+            return true;
         }
 
         /// <summary>

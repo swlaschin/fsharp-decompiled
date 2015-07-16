@@ -26,6 +26,7 @@ namespace CsEquivalents
         [Serializable]
         public class Something
         {
+// ReSharper disable once EmptyConstructor
             public Something()                
             {
             }

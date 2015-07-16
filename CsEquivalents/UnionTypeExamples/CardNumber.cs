@@ -50,9 +50,9 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            int num = 0;
+            const int num = 0;
             const int offset = -1640531527;
-            string text = this.Item;
+            var text = this.Item;
             return offset + (((text == null) ? 0 : text.GetHashCode()) + ((num << 6) + (num >> 2)));
         }
 

@@ -41,10 +41,10 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            int num = 0;
-            int offset = -1640531527;
+            var num = 0;
+            const int offset = -1640531527;
             num = offset + (this.FinalScore + ((num << 6) + (num >> 2)));
-            string game = this.Game;
+            var game = this.Game;
             return offset + (((game == null) ? 0 : game.GetHashCode()) + ((num << 6) + (num >> 2)));
         }
 

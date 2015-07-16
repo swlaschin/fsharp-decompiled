@@ -50,7 +50,7 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int GetHashCode(IEqualityComparer comp)
         {
-            int num = 0;
+            const int num = 0;
             return -1640531527 + (this.Item + ((num << 6) + (num >> 2)));
         }
 
