@@ -6,15 +6,12 @@ namespace CsEquivalents.RecordTypeExamples
 {
 
     /// <summary>
-    ///  Example of a simple mutable record 
+    /// Example of a simple mutable record without comparison
     /// </summary>
     [Serializable]
     public sealed class UpdatableGameScore :
         IEquatable<UpdatableGameScore>,
-        IStructuralEquatable,
-        IComparable<UpdatableGameScore>,
-        IComparable,
-        IStructuralComparable
+        IStructuralEquatable
     {
         /// <summary>
         /// Game property
@@ -82,44 +79,6 @@ namespace CsEquivalents.RecordTypeExamples
             // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
             return Equals(obj);
         }
-
-
-        /// <summary>
-        ///  Implement custom comparison
-        /// </summary>
-        public int CompareTo(UpdatableGameScore obj)
-        {
-            if (obj == null)
-            {
-                return 1;
-            }
-
-            int num = string.CompareOrdinal(this.Game, obj.Game);
-            if (num != 0)
-            {
-                return num;
-            }
-
-            return this.CurrentScore.CompareTo(obj.CurrentScore);
-        }
-
-        /// <summary>
-        ///  Implement custom comparison
-        /// </summary>
-        public int CompareTo(object obj)
-        {
-            return this.CompareTo((UpdatableGameScore)obj);
-        }
-
-        /// <summary>
-        ///  Implement custom comparison
-        /// </summary>
-        public int CompareTo(object obj, IComparer comp)
-        {
-            // ignore the IComparer as a simplification -- the generated F# code is more complex
-            return this.CompareTo((UpdatableGameScore)obj);
-        }
-
     }
 }
 

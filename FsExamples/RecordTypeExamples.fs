@@ -10,7 +10,8 @@ type FinalGameScore = {
     FinalScore : int
     }
 
-/// Example of a simple mutable record 
+/// Example of a simple mutable record without comparison
+[<NoComparisonAttribute>]
 type UpdatableGameScore = {
     /// Game property
     Game: string

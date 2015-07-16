@@ -11,10 +11,7 @@ namespace CsEquivalents.UnionTypeExamples
     [Serializable]
     public abstract class PaymentMethod :
         IEquatable<PaymentMethod>,
-        IStructuralEquatable,
-        IComparable<PaymentMethod>,
-        IComparable,
-        IStructuralComparable
+        IStructuralEquatable
     {
 
         public static class Tags
@@ -215,61 +212,5 @@ namespace CsEquivalents.UnionTypeExamples
             return Equals(obj);
         }
 
-        /// <summary>
-        ///  Implement custom comparison
-        /// </summary>
-        public int CompareTo(PaymentMethod obj)
-        {
-            if (obj == null)
-            {
-                return 1;
-            }
-            var num = Tag.CompareTo(obj.Tag);
-            if (num != 0)
-            {
-                return num;
-            }
-
-            var genericComparer = LanguagePrimitives.GenericComparer;
-
-            // both same type now
-            if (this is Check)
-            {
-                var check = (Check) this;
-                var check2 = (Check) obj;
-                return check.Item.CompareTo(check2.Item, genericComparer);
-            }
-
-            if (!(this is CreditCard))
-            {
-                return 0;
-            }
-
-            var creditCard = (CreditCard) this;
-            var creditCard2 = (CreditCard) obj;
-            num = creditCard.Item1.CompareTo(creditCard2.Item1, genericComparer);
-            if (num != 0)
-            {
-                return num;
-            }
-            return creditCard.Item2.CompareTo(creditCard2.Item2, genericComparer);
-        }
-
-        /// <summary>
-        ///  Implement custom comparison
-        /// </summary>
-        public int CompareTo(object obj)
-        {
-            return CompareTo((PaymentMethod)obj);
-        }
-
-        /// <summary>
-        ///  Implement custom comparison
-        /// </summary>
-        public int CompareTo(object obj, IComparer comp)
-        {
-            // ignore the IComparer as a simplification -- the generated F# code is more complex
-            return CompareTo((PaymentMethod)obj);
-        }
     }
 }

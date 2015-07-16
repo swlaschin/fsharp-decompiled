@@ -18,6 +18,7 @@ type CardType = MasterCard | Visa
 type CardNumber = CardNumber of string
 
 /// PaymentMethod is cash, check or card
+[<NoComparisonAttribute>]
 type PaymentMethod = 
     /// Cash needs no extra information
     | Cash
