@@ -104,26 +104,6 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
-		{
-			if (this == null)
-			{
-				return obj == null;
-			}
-			CardType cardType = obj as CardType;
-			if (cardType != null)
-			{
-				CardType cardType2 = cardType;
-				int tag = this._tag;
-				int tag2 = cardType2._tag;
-				return tag == tag2;
-			}
-			return false;
-		}
-
-        /// <summary>
-        ///  Implement custom equality
-        /// </summary>
         public bool Equals(CardType obj)
 		{
 			if (this == null)
@@ -132,9 +112,7 @@ namespace CsEquivalents.UnionTypeExamples
 			}
 			if (obj != null)
 			{
-				int tag = this._tag;
-				int tag2 = obj._tag;
-				return tag == tag2;
+                return this._tag == obj._tag;
 			}
 			return false;
 		}
@@ -149,6 +127,16 @@ namespace CsEquivalents.UnionTypeExamples
 		}
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(CardType obj)
@@ -159,21 +147,11 @@ namespace CsEquivalents.UnionTypeExamples
                 {
                     return 1;
                 }
-                int tag = this._tag;
-                int tag2 = obj._tag;
-                if (tag == tag2)
-                {
-                    return 0;
-                }
-                return tag - tag2;
+                return this._tag.CompareTo(obj._tag);
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -190,29 +168,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            CardType cardType = (CardType)obj;
-            if (this != null)
-            {
-                if ((CardType)obj == null)
-                {
-                    return 1;
-                }
-                int tag = this._tag;
-                int tag2 = cardType._tag;
-                if (tag == tag2)
-                {
-                    return 0;
-                }
-                return tag - tag2;
-            }
-            else
-            {
-                if ((CardType)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((CardType)obj);
         }
 	}
 }

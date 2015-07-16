@@ -138,26 +138,6 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
-		{
-			if (this == null)
-			{
-				return obj == null;
-			}
-			Color color = obj as Color;
-			if (color != null)
-			{
-				Color color2 = color;
-				int tag = this._tag;
-				int tag2 = color2._tag;
-				return tag == tag2;
-			}
-			return false;
-		}
-
-        /// <summary>
-        ///  Implement custom equality
-        /// </summary>
         public bool Equals(Color obj)
 		{
 			if (this == null)
@@ -166,10 +146,8 @@ namespace CsEquivalents.UnionTypeExamples
 			}
 			if (obj != null)
 			{
-				int tag = this._tag;
-				int tag2 = obj._tag;
-				return tag == tag2;
-			}
+                return this._tag == obj._tag;
+            }
 			return false;
 		}
 
@@ -183,6 +161,15 @@ namespace CsEquivalents.UnionTypeExamples
 		}
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(Color obj)
@@ -194,22 +181,11 @@ namespace CsEquivalents.UnionTypeExamples
                     return 1;
                 }
 
-                int tag = this._tag;
-                int tag2 = obj._tag;
-                if (tag == tag2)
-                {
-                    return 0;
-                }
-
-                return tag - tag2;
+                return this._tag.CompareTo(obj._tag);
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -226,29 +202,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            Color color = (Color)obj;
-            if (this != null)
-            {
-                if ((Color)obj == null)
-                {
-                    return 1;
-                }
-                int tag = this._tag;
-                int tag2 = color._tag;
-                if (tag == tag2)
-                {
-                    return 0;
-                }
-                return tag - tag2;
-            }
-            else
-            {
-                if ((Color)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((Color)obj);
         }
 	}
 }

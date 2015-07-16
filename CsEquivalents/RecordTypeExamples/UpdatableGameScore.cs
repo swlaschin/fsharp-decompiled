@@ -81,25 +81,6 @@ namespace CsEquivalents.RecordTypeExamples
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
-        {
-            if (this == null)
-            {
-                return obj == null;
-            }
-            UpdatableGameScore updatableGameScore = obj as UpdatableGameScore;
-            if (updatableGameScore != null)
-            {
-                UpdatableGameScore updatableGameScore2 = updatableGameScore;
-                return string.Equals(this._Game, updatableGameScore2._Game)
-                    && this._CurrentScore == updatableGameScore2._CurrentScore;
-            }
-            return false;
-        }
-
-        /// <summary>
-        ///  Implement custom equality
-        /// </summary>
         public bool Equals(UpdatableGameScore obj)
         {
             if (this != null)
@@ -121,6 +102,16 @@ namespace CsEquivalents.RecordTypeExamples
         }
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(UpdatableGameScore obj)
@@ -133,31 +124,16 @@ namespace CsEquivalents.RecordTypeExamples
                 }
 
                 int num = string.CompareOrdinal(this._Game, obj._Game);
-                if (num < 0)
-                {
-                    return num;
-                }
-                if (num > 0)
+                if (num != 0)
                 {
                     return num;
                 }
 
-                int _currentScore = this._CurrentScore;
-                int _currentScore2 = obj._CurrentScore;
-                if (_currentScore < _currentScore2)
-                {
-                    return -1;
-                }
-
-                return (_currentScore > _currentScore2) ? 1 : 0;
+                return this._CurrentScore.CompareTo(obj._CurrentScore);
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -174,39 +150,8 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            UpdatableGameScore updatableGameScore = (UpdatableGameScore)obj;
-            UpdatableGameScore updatableGameScore2 = updatableGameScore;
-            if (this != null)
-            {
-                if ((UpdatableGameScore)obj == null)
-                {
-                    return 1;
-                }
-                int num = string.CompareOrdinal(this._Game, updatableGameScore2._Game);
-                if (num < 0)
-                {
-                    return num;
-                }
-                if (num > 0)
-                {
-                    return num;
-                }
-                int _currentScore = this._CurrentScore;
-                int _currentScore2 = updatableGameScore2._CurrentScore;
-                if (_currentScore < _currentScore2)
-                {
-                    return -1;
-                }
-                return (_currentScore > _currentScore2) ? 1 : 0;
-            }
-            else
-            {
-                if ((UpdatableGameScore)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((UpdatableGameScore)obj);
         }
 
     }

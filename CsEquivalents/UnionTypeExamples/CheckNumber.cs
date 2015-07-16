@@ -77,25 +77,6 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
-		{
-			if (this == null)
-			{
-				return obj == null;
-			}
-			CheckNumber checkNumber = obj as CheckNumber;
-			if (checkNumber != null)
-			{
-				CheckNumber checkNumber2 = checkNumber;
-				CheckNumber checkNumber3 = checkNumber2;
-				return this.item == checkNumber3.item;
-			}
-			return false;
-		}
-
-        /// <summary>
-        ///  Implement custom equality
-        /// </summary>
         public bool Equals(CheckNumber obj)
 		{
 			if (this != null)
@@ -115,6 +96,16 @@ namespace CsEquivalents.UnionTypeExamples
 		}
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(CheckNumber obj)
@@ -125,22 +116,11 @@ namespace CsEquivalents.UnionTypeExamples
                 {
                     return 1;
                 }
-                IComparer genericComparer = LanguagePrimitives.GenericComparer;
-                int num = this.item;
-                int num2 = obj.item;
-                if (num < num2)
-                {
-                    return -1;
-                }
-                return (num > num2) ? 1 : 0;
+                return this.item.CompareTo(obj.item);
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -157,30 +137,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            CheckNumber checkNumber = (CheckNumber)obj;
-            if (this != null)
-            {
-                if ((CheckNumber)obj == null)
-                {
-                    return 1;
-                }
-                CheckNumber checkNumber2 = checkNumber;
-                int num = this.item;
-                int num2 = checkNumber2.item;
-                if (num < num2)
-                {
-                    return -1;
-                }
-                return (num > num2) ? 1 : 0;
-            }
-            else
-            {
-                if ((CheckNumber)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((CheckNumber)obj);
         }
 	}
 }

@@ -79,25 +79,6 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
-        {
-            if (this == null)
-            {
-                return obj == null;
-            }
-            ProductId productId = obj as ProductId;
-            if (productId != null)
-            {
-                ProductId productId2 = productId;
-                ProductId productId3 = productId2;
-                return this.item == productId3.item;
-            }
-            return false;
-        }
-
-        /// <summary>
-        ///  Implement custom equality
-        /// </summary>
         public bool Equals(ProductId obj)
         {
             if (this != null)
@@ -117,6 +98,16 @@ namespace CsEquivalents.UnionTypeExamples
         }
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(ProductId obj)
@@ -127,22 +118,11 @@ namespace CsEquivalents.UnionTypeExamples
                 {
                     return 1;
                 }
-                IComparer genericComparer = LanguagePrimitives.GenericComparer;
-                int num = this.item;
-                int num2 = obj.item;
-                if (num < num2)
-                {
-                    return -1;
-                }
-                return (num > num2) ? 1 : 0;
+                return this.item.CompareTo(obj.item);
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -159,30 +139,8 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            ProductId productId = (ProductId)obj;
-            if (this != null)
-            {
-                if ((ProductId)obj == null)
-                {
-                    return 1;
-                }
-                ProductId productId2 = productId;
-                int num = this.item;
-                int num2 = productId2.item;
-                if (num < num2)
-                {
-                    return -1;
-                }
-                return (num > num2) ? 1 : 0;
-            }
-            else
-            {
-                if ((ProductId)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((ProductId)obj);
         }
     }
 }

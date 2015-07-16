@@ -56,28 +56,24 @@ namespace CsEquivalents.UnionTypeExamples
         /// <summary>
         ///  Needed for custom equality
         /// </summary>
-        public sealed override int GetHashCode()
+        public int GetHashCode(IEqualityComparer comp)
         {
-            return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
+            if (this != null)
+            {
+                int num = 0;
+                int arg_39_0 = -1640531527;
+                string text = this.item;
+                return arg_39_0 + (((text == null) ? 0 : text.GetHashCode()) + ((num << 6) + (num >> 2)));
+            }
+            return 0;
         }
 
         /// <summary>
-        ///  Implement custom equality
+        ///  Needed for custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
+        public sealed override int GetHashCode()
         {
-            if (this == null)
-            {
-                return obj == null;
-            }
-            CardNumber cardNumber = obj as CardNumber;
-            if (cardNumber != null)
-            {
-                CardNumber cardNumber2 = cardNumber;
-                CardNumber cardNumber3 = cardNumber2;
-                return string.Equals(this.item, cardNumber3.item);
-            }
-            return false;
+            return this.GetHashCode(LanguagePrimitives.GenericEqualityComparer);
         }
 
         /// <summary>
@@ -102,6 +98,16 @@ namespace CsEquivalents.UnionTypeExamples
         }
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(CardNumber obj)
@@ -110,18 +116,13 @@ namespace CsEquivalents.UnionTypeExamples
             {
                 if (obj != null)
                 {
-                    IComparer genericComparer = LanguagePrimitives.GenericComparer;
                     return string.CompareOrdinal(this.item, obj.item);
                 }
                 return 1;
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -138,39 +139,10 @@ namespace CsEquivalents.UnionTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            CardNumber cardNumber = (CardNumber)obj;
-            if (this != null)
-            {
-                if ((CardNumber)obj != null)
-                {
-                    CardNumber cardNumber2 = cardNumber;
-                    return string.CompareOrdinal(this.item, cardNumber2.item);
-                }
-                return 1;
-            }
-            else
-            {
-                if ((CardNumber)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((CardNumber)obj);
         }
 
-        /// <summary>
-        ///  Needed for custom equality
-        /// </summary>
-        public int GetHashCode(IEqualityComparer comp)
-        {
-            if (this != null)
-            {
-                int num = 0;
-                int arg_39_0 = -1640531527;
-                string text = this.item;
-                return arg_39_0 + (((text == null) ? 0 : text.GetHashCode()) + ((num << 6) + (num >> 2)));
-            }
-            return 0;
-        }
+
     }
 }

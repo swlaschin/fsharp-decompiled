@@ -111,27 +111,6 @@ namespace CsEquivalents.RecordTypeExamples
         /// <summary>
         ///  Implement custom equality
         /// </summary>
-        public bool Equals(object obj, IEqualityComparer comp)
-        {
-            if (this == null)
-            {
-                return obj == null;
-            }
-            Person person = obj as Person;
-            if (person != null)
-            {
-                Person person2 = person;
-                return string.Equals(this._FirstName, person2._FirstName)
-                    && string.Equals(this._LastName, person2._LastName)
-                    && LanguagePrimitives.HashCompare.GenericEqualityWithComparerIntrinsic<DateTime>(comp, this._DateOfBirth, person2._DateOfBirth);
-            }
-            return false;
-        }
-
-
-        /// <summary>
-        ///  Implement custom equality
-        /// </summary>
         public bool Equals(Person obj)
         {
             if (this != null)
@@ -154,6 +133,16 @@ namespace CsEquivalents.RecordTypeExamples
         }
 
         /// <summary>
+        ///  Implement custom equality
+        /// </summary>
+        public bool Equals(object obj, IEqualityComparer comp)
+        {
+            // ignore the IEqualityComparer as a simplification -- the generated F# code is more complex
+            return Equals(obj);
+        }
+
+
+        /// <summary>
         ///  Implement custom comparison
         /// </summary>
         public int CompareTo(Person obj)
@@ -166,33 +155,22 @@ namespace CsEquivalents.RecordTypeExamples
                 }
 
                 int num = string.CompareOrdinal(this._FirstName, obj._FirstName);
-                if (num < 0)
-                {
-                    return num;
-                }
-                if (num > 0)
+                if (num != 0)
                 {
                     return num;
                 }
 
                 int num2 = string.CompareOrdinal(this._LastName, obj._LastName);
-                if (num2 < 0)
+                if (num2 != 0)
                 {
                     return num2;
                 }
-                if (num2 > 0)
-                {
-                    return num2;
-                }
+                
                 return LanguagePrimitives.HashCompare.GenericComparisonWithComparerIntrinsic<DateTime>(LanguagePrimitives.GenericComparer, this._DateOfBirth, obj._DateOfBirth);
             }
             else
             {
-                if (obj != null)
-                {
-                    return -1;
-                }
-                return 0;
+                return obj != null ? -1 : 0;
             }
         }
 
@@ -209,42 +187,8 @@ namespace CsEquivalents.RecordTypeExamples
         /// </summary>
         public int CompareTo(object obj, IComparer comp)
         {
-            Person person = (Person)obj;
-            Person person2 = person;
-            if (this != null)
-            {
-                if ((Person)obj == null)
-                {
-                    return 1;
-                }
-                int num = string.CompareOrdinal(this._FirstName, person2._FirstName);
-                if (num < 0)
-                {
-                    return num;
-                }
-                if (num > 0)
-                {
-                    return num;
-                }
-                int num2 = string.CompareOrdinal(this._LastName, person2._LastName);
-                if (num2 < 0)
-                {
-                    return num2;
-                }
-                if (num2 > 0)
-                {
-                    return num2;
-                }
-                return LanguagePrimitives.HashCompare.GenericComparisonWithComparerIntrinsic<DateTime>(comp, this._DateOfBirth, person2._DateOfBirth);
-            }
-            else
-            {
-                if ((Person)obj != null)
-                {
-                    return -1;
-                }
-                return 0;
-            }
+            // ignore the IComparer as a simplification -- the generated F# code is more complex
+            return this.CompareTo((Person)obj);
         }
     }
 
