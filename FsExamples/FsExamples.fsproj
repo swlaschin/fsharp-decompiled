@@ -51,6 +51,7 @@
     <Compile Include="ClassExamples.fs" />
     <Compile Include="UnionTypeExamples.fs" />
     <Compile Include="ModuleExample.fs" />
+    <Compile Include="PatternMatchingExamples.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
