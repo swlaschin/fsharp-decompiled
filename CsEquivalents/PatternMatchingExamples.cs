@@ -289,15 +289,16 @@ namespace CsEquivalents
 
             // test for empty
             var tail1 = list.TailOrNull;
-
             if (tail1 == null)
             {
                 return ExtraTopLevelOperators.PrintFormatToString(
                     new PrintfFormat<string, Unit, string, string, Unit>("Empty list"));
             }
 
-            // test for one or more elements
+            // first element is valid
             var firstElem = list.HeadOrDefault;
+
+            // test for one or more elements
             if (tail1.TailOrNull == null)
             {
                 var print = ExtraTopLevelOperators.PrintFormatToString(
@@ -305,8 +306,10 @@ namespace CsEquivalents
                 return print.Invoke(firstElem);
             }
 
-            // test for exactly two elements
+            // second element is valid
             var secondElem = tail1.HeadOrDefault;
+
+            // test for exactly two elements
             var tail2 = tail1.TailOrNull;
             if (tail2.TailOrNull == null)
             {
@@ -321,6 +324,39 @@ namespace CsEquivalents
             return print3.Invoke(firstElem).Invoke(secondElem);
         }
 
+        public static string ListTestingCsIdiomatic<T>(FSharpList<T> list)
+        {
+            // NOTE: This is a more idiomatic C# version of the generated code
+
+            // test for empty
+            var tail1 = list.TailOrNull;
+            if (tail1 == null)
+            {
+                return "Empty list";
+            }
+
+            // first element is valid
+            var firstElem = list.HeadOrDefault;
+
+            // test for one or more elements
+            if (tail1.TailOrNull == null)
+            {
+                return string.Format("One or more elements starting with {0}", firstElem);
+            }
+
+            // second element is valid
+            var secondElem = tail1.HeadOrDefault;
+
+            // test for exactly two elements
+            var tail2 = tail1.TailOrNull;
+            if (tail2.TailOrNull == null)
+            {
+                return string.Format("Exactly two elements {0} and {1}", firstElem, secondElem);
+            }
+
+            // test for two or more elements
+            return string.Format("Two or more elements starting with {0} and {1}", firstElem, secondElem);
+        }
 
         public static string TypeTesting<T>(T obj)
         {
